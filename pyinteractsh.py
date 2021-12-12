@@ -16,6 +16,10 @@ class interactsh_instance:
         self.correlation_id = correlation_id
         self.url = url
 
+# Self explanatory
+def deregister(intsh_instance):
+    requests.post(intsh_instance.server+"/deregister",json={"correlation-id":intsh_instance.correlation_id,"secret-key":intsh_instance.secret_key})        
+        
 def create_instance():
     # make keys
     private_key = rsa.generate_private_key(
