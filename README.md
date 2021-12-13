@@ -87,6 +87,5 @@ while True:
         pyinteractsh.deregister(ish)
     time.sleep(1)
 ```
-
 # TODO
 Add server configuration options (use custom URL)
