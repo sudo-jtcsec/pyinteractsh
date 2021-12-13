@@ -2,7 +2,7 @@
 
 Creates a unique interactsh URL and poll it for interactions
 
-- use create_instance() to create an object to use for polling
+- use create_instance() to create an object to use for polling - optionally, call it with a hostname value to register with your own interactsh isntance
 - use poll() to poll instance at desired interval to retrieve JSON object of interaction
 - use deregister() to cleanup an instance
 
@@ -11,8 +11,8 @@ Calling create_instance() returns an object with the following values - it will 
 
  - private_key: the bytes of the private key used to register your client. Needed for decrypting poll data
  - public_key: the bytes of public key used to register your client. I don't think you'll need it after registering, but I save it just in case
- - server: the URL to the interactsh server you're registering to. Currently harcoded to https://interact.sh
- - host: hostname of the interactsh server youre using. Currently hardcoded to interact.sh
+ - server: the URL to the interactsh server you're registering to. Can be changed to custom interactsh server by calling create_instance with a hostname value
+ - host: hostname of the interactsh server youre using. Can be changed to custom interactsh server by calling create_instance with a hostname value
  - secret_key: the random UID generated when registering. Required to poll data
  - correlation_id: the string used to identify your interactions. Required to poll data
  - url: an example URL to interact with using your correlation_id
