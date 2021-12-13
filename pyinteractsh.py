@@ -16,11 +16,7 @@ class interactsh_instance:
         self.correlation_id = correlation_id
         self.url = url
 
-# Self explanatory
-def deregister(intsh_instance):
-    requests.post(intsh_instance.server+"/deregister",json={"correlation-id":intsh_instance.correlation_id,"secret-key":intsh_instance.secret_key})        
-        
-def create_instance():
+def create_instance(hostname="interact.sh"):
     # make keys
     private_key = rsa.generate_private_key(
         public_exponent=65537,
@@ -41,8 +37,8 @@ def create_instance():
 
     ####################
     # vars
-    server = "https://interact.sh"
-    host = "interact.sh"
+    server = "https://"+hostname
+    host = hostname
     public_key_b64 = base64.b64encode(pem_public_key)
     secret_key = str(uuid.uuid4())
     letters = string.ascii_lowercase
@@ -53,14 +49,18 @@ def create_instance():
     ########
     # register
     json2send = {"public-key":public_key_b64.decode('ascii'),"secret-key":secret_key,"correlation-id":correlation_id_init}
-    response = requests.post(server+"/register",json=json2send)
+    response = requests.post(server+"/register",json=json2send,verify=False)
     intsh_instance = interactsh_instance(unencrypted_pem_private_key,public_key_b64,server,host,secret_key,correlation_id_init,"https://"+correlation_id+"."+host)
     return  intsh_instance
+
+# Self explanatory
+def deregister(intsh_instance):
+    requests.post(intsh_instance.server+"/deregister",json={"correlation-id":intsh_instance.correlation_id,"secret-key":intsh_instance.secret_key},verify=False)
 
 def poll(intsh_instance):
     # Get Interactions
     ints = []
-    resp = requests.get(intsh_instance.server+"/poll?id="+intsh_instance.correlation_id+"&secret="+intsh_instance.secret_key)
+    resp = requests.get(intsh_instance.server+"/poll?id="+intsh_instance.correlation_id+"&secret="+intsh_instance.secret_key,verify=False)
     # pass if none
     if resp.json()["data"] == []:
         pass
@@ -97,3 +97,4 @@ def poll(intsh_instance):
             interaction = json.loads(interactionb,strict=False)
             ints.append(interaction)
     return ints
+                
