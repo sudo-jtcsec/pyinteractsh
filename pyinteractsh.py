@@ -1,8 +1,8 @@
 import requests, base64, uuid, random, string, time, json
-import Cryptodome.Cipher.PKCS1_OAEP as PKCS1_OAEP
-import Cryptodome.Cipher.AES as AES
-import Cryptodome.PublicKey.RSA as RSA2
-import Cryptodome.Hash
+import Crypto.Cipher.PKCS1_OAEP as PKCS1_OAEP
+import Crypto.Cipher.AES as AES
+import Crypto.PublicKey.RSA as RSA2
+import Crypto.Hash
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
 
@@ -16,7 +16,7 @@ class interactsh_instance:
         self.correlation_id = correlation_id
         self.url = url
 
-def create_instance(hostname="interact.sh"):
+def create_instance(hostname="oast.me"):
     # make keys
     private_key = rsa.generate_private_key(
         public_exponent=65537,
@@ -61,8 +61,9 @@ def poll(intsh_instance):
     # Get Interactions
     ints = []
     resp = requests.get(intsh_instance.server+"/poll?id="+intsh_instance.correlation_id+"&secret="+intsh_instance.secret_key,verify=False)
+
     # pass if none
-    if resp.json()["data"] == []:
+    if resp.json()["data"] is None:
         pass
     else:
         # get bytes of base64 key (encoded)
@@ -72,7 +73,7 @@ def poll(intsh_instance):
         # load the provided key
         k = RSA2.importKey(intsh_instance.private_key)
         # create cipher
-        cipher1 = PKCS1_OAEP.new(k,Cryptodome.Hash.SHA256)
+        cipher1 = PKCS1_OAEP.new(k,Crypto.Hash.SHA256)
         keyPlaintext = cipher1.decrypt(decodedkey)
         
         # Pares data list
