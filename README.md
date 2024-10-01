@@ -7,7 +7,7 @@ Creates a unique interactsh URL and poll it for interactions
 - use deregister() to cleanup an instance
 
 # interactsh_instance Object
-Calling create_instance() returns an object with the following values - it will mainly be used to pass required data to the poll function as well as to provide a proper URL to use for interactions. The data youll want is the list returend by poll()
+Calling create_instance() returns an object with the following values - it will mainly be used to pass required data to the poll function as well as to provide a proper URL to use for interactions. The data youll want is the list returend by poll(). You can pass a custom interactsh server value as a parameter like ```pyinteractsh.create_instance("oast.fun")```
 
  - private_key: the bytes of the private key used to register your client. Needed for decrypting poll data
  - public_key: the bytes of public key used to register your client. I don't think you'll need it after registering, but I save it just in case
@@ -83,7 +83,7 @@ from urllib3.exceptions import InsecureRequestWarning
 warnings.simplefilter('ignore', InsecureRequestWarning)
 
 # create the instance
-ish = pyinteractsh.create_instance()
+ish = pyinteractsh.create_instance("oast.fun")
 # get the URL to interact with
 print(ish.url)
 while True:
@@ -95,5 +95,4 @@ while True:
         pyinteractsh.deregister(ish)
     time.sleep(1)
 ```
-# TODO
-Add server configuration options (use custom URL)
+
