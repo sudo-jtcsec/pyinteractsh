@@ -74,6 +74,14 @@ Below snippet will create a new instance, poll it every second for interactions,
 
 ```
 import pyinteractsh, time
+
+import warnings
+import requests
+from urllib3.exceptions import InsecureRequestWarning
+
+# Suppress only the specific SSL warning
+warnings.simplefilter('ignore', InsecureRequestWarning)
+
 # create the instance
 ish = pyinteractsh.create_instance()
 # get the URL to interact with
